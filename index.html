@@ -1,0 +1,148 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Shopping App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container container-hide">
+        <div class="title">
+            <h4>kindly provide your details here</h4>
+        </div>
+        <div class="form">
+            <form id="login">
+                <div class="form-container">
+                    <input class="input-el" id="input-name" placeholder="Fullname">
+                    <big></big>
+                </div>
+
+                <div class="form-container">
+                    <input class="input-el" id="input-mail" placeholder="Email">
+                    <big></big>
+                </div>
+
+                <div class="form-container">
+                    <input class="input-el" id="input-addr" placeholder="Address">
+                    <big></big>
+                </div>
+
+                <button type="submit" class="btn" id="btn-continue">continue</button>
+            </form>
+            
+        </div>
+    </div>
+
+    <div class="container ">
+        <div class="title">
+            <h4>select products below and add to cart</h4>
+        </div>
+        <div class="row" id="display-row">
+            <!-- <div class="cart">
+                <div class="cart-item">
+                    <div class="cart-item-img">
+                         <img src="Rectangle 8.png" alt="studded shoe">
+                    </div>
+                    <div class="cart-item-desc">
+                         <p>elegant studded shoe</p>
+                        <p>#10,000</p> 
+                        <span data-Id="product1"></span>
+
+                    </div>
+                    <div class="btn-center">
+                        <button class="cart-item-btn">add to cart</button>
+                    </div>
+                </div>
+            </div> -->
+
+            <div id="product-catalog">
+
+            </div>
+
+            <!-- <div class="cart"> -->
+                <!-- <div class="cart-item">
+                    <div class="cart-item-img">
+                        <img src="Rectangle 8 (1).png" alt="sun glasses">
+                    </div>
+                    <div class="cart-item-desc">
+                        <p>beautiful sunglasses</p>
+                        <p>#10,000</p>
+                        <span data-Id="product2"></span>
+                    
+                    </div>
+                    <div class="btn-center">
+                        <button class="cart-item-btn">add to cart</button>
+                    </div>
+                </div> -->
+            <!-- </div> -->
+
+            <!-- <div class="cart"> -->
+                <!-- <div class="cart-item">
+                    <div class="cart-item-img">
+                        <img src="Rectangle 8 (2).png" alt="baseball cap">
+                    </div>
+                    <div class="cart-item-desc">
+                        <p>nike baseball cap</p>
+                        <p>#10,000</p>
+                        <span data-Id="product3"></span>
+                    </div>
+                    <div class="btn-center">
+                        <button class="cart-item-btn">add to cart</button>
+                    </div>
+                </div> -->
+            <!-- </div> -->
+        </div>
+
+        <div class="col">
+            <div class="table-head">
+                <h2>My cart</h2>
+                <h2>item(<span id="product-count">0</span>)</h2>
+            </div>
+
+            <!-- <div class="table-label">
+                <h2>product</h2>
+                <h2>price</h2>
+                <h2>quantity</h2>
+                <h2>action</h2>
+            </div> -->
+            
+            <table class="table-label">
+                <thead>
+                    <tr>
+                        <th>product</th>
+                        <th>price</th>
+                        <th>quantity</th>
+                        <th>action</th>
+                    </tr> 
+                </thead>
+
+                <tbody id="cartItems">
+                    
+                </tbody>
+             </table>
+
+            <div class="table-result">
+                <span id="val"></span>
+            </div>
+            
+            <div class="btn-confirm">
+                <button id="btn-complete">complete</button>
+            </div>
+        </div>
+        
+
+
+    </div>
+
+    <div class="container container-hide">
+        <div class="title" id = "message">
+        </div>
+        <button class="btn" id="btn-back">back to home</button>
+    <div>
+
+    <script type="text/javascript" src="app.js"></script>
+    
+</body>
+</html>
