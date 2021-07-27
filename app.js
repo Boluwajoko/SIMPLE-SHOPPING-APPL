@@ -1,3 +1,5 @@
+
+// declare all variables
 const btnContinue = document.getElementById("btn-continue");
 const btnComplete = document.getElementById("btn-complete");
 const btnBack = document.getElementById("btn-back");
@@ -8,8 +10,7 @@ const form = document.getElementById("login");
 // this array stores user data
 let userData = [];
 
-//the cartItems array stores product details
-// let cartItems = [];
+//this array stores cart items
 let cartItems = getCartItemsinLS();
 
 updateCart();
@@ -17,7 +18,7 @@ updateCart();
 //using localStorage
 function getCartItemsinLS(){
     let cartItemsLS = localStorage.getItem("cartItems");
-    console.log(cartItemsLS);
+    // console.log(cartItemsLS);
 
     let parsed = JSON.parse(cartItemsLS);
 
@@ -31,8 +32,9 @@ function getCartItemsinLS(){
 
 function setCartItemsLS () {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    // console.log(cartItems);
 }
-// localStorage.setItem("cartDisplay", JSON.stringify(cartItems));
+
 
 let shopProducts = [
     {
@@ -67,9 +69,20 @@ let shopProducts = [
         quantityInStore: 100
     }
 ];
+// let productid = "";
+//to get singular unit
+function getSingleUnit(productid) {
+    let product;
+    shopProducts.forEach(item => {
+        if(item.id === productid) {
+            console.log(item);
+           product = item;
+        }
+        
+    }); 
 
-
-// localStorage.clear();
+    return product;
+};
 
 
 // form field variable declaration
@@ -162,15 +175,9 @@ form.addEventListener("submit", function(event) {
 // variable to hold the name and price of your target product
 let productName = "";
 let productPrice = "";
-let productCartCount = document.getElementById("product-count");
-console.log(productCartCount);
+// console.log(productCartCount);
 let numberOfProduct = 0;
-/* event listener that listens to `add to cart` click event and adds the
-product to the cart table */
 
-// function addItemsToLocalStorage() {
-//     localStorage.setItem('cartItems', JSON.stringify(product));
-// }
 
 //to update product display on catalogue
 function updateProductDisplay() {
@@ -205,9 +212,8 @@ function updateProductDisplay() {
         setCartItemsLS();
         updateCart();
         updateSubTotal();
-      
     
-        delItemsFromCart();
+        
         console.log(cartItems); 
       
         });
@@ -215,22 +221,31 @@ function updateProductDisplay() {
       
       });
 }
- 
-//to update cart
-function updateCart(){
-    let cartItemsEl = document.getElementById("cartItems");
-    console.log(cartItemsEl);
-    cartItemsEl.innerHTML = "";
-    console.log(cartItemsEl);
-    console.log(cartItems);
 
-    cartItems.forEach(function(productInCartStorage){
-        addItemsToCart(productInCartStorage, cartItemsEl);
-        
-    });
+//to display the product details on the catalogue
+function displayProductDetails (itemsInProductStorage, displayEl) {
 
-    delItemsFromCart();
+    let divEl = `
+    <div class= "cart">
+        <div class="cart-item">
+            <div class="cart-item-img">
+                <img src="${itemsInProductStorage.imageSrc}" alt="studded shoe">
+            </div>
+            <div class="cart-item-desc">
+                <p>${itemsInProductStorage.nameValue}</p>
+                <p>${itemsInProductStorage.pricePerUnit}</p>
+                <span data-Id="${itemsInProductStorage.id}"></span>
+            </div>
+            <div class="btn-center">
+                <button class="cart-item-btn">add to cart</button>
+            </div>
+        </div>
+    </div>
+    `;
+
+    displayEl.insertAdjacentHTML('beforeend', divEl);
 }
+ 
 
 //add product to Storage
 function addProductToStorage(product){
@@ -258,42 +273,7 @@ function addProductToStorage(product){
         cartItems.push(product);
     }
     
-// let itemTOLS = JSON.stringify(cartItems);
-// localStorage.setItem('shoppingCart',itemTOLS);
-// document.getElementById("cartItems").innerHTML = "";
 }
-
-//to display the product details on the catalogue
-function displayProductDetails (itemsInProductStorage, displayEl) {
-
-    let divEl = `
-    <div class= "cart">
-        <div class="cart-item">
-            <div class="cart-item-img">
-                <img src="${itemsInProductStorage.imageSrc}" alt="studded shoe">
-            </div>
-            <div class="cart-item-desc">
-                <p>${itemsInProductStorage.nameValue}</p>
-                <p>${itemsInProductStorage.pricePerUnit}</p>
-                <span data-Id="${itemsInProductStorage.id}"></span>
-            </div>
-            <div class="btn-center">
-                <button class="cart-item-btn">add to cart</button>
-            </div>
-        </div>
-    </div>
-    `;
-
-    displayEl.insertAdjacentHTML('beforeend', divEl);
-}
-
-
-/* to increment and decrement product quanitity on cart */
-// const incrementButton = document.getElementsByClassName("inc-button");
-// const decrementButton = document.getElementsByClassName("dec-button");
-// console.log(incrementButton);
-// console.log(decrementButton);
-   
 
 //adding product to cart from catalogue
 function addItemsToCart(productInCartStorage, cartItemsEl) {
@@ -301,13 +281,14 @@ function addItemsToCart(productInCartStorage, cartItemsEl) {
     let trElement = `
     <tr>
     <td>${productInCartStorage.name}</td>
-    <td>${productInCartStorage.price}</td>
+    <td id = product-price>${productInCartStorage.price}</td>
     <td> 
     <div id = "quantity-container">
-    <button id = "dec-button">-</button>
-    <div>${productInCartStorage.quantity}</div>
-    <button id = "inc-button">+</button>
+    <button class = "button-decrement" data-id="${productInCartStorage.id}">-</button>
+    <div class = quantity-value>${productInCartStorage.quantity}</div>
+    <button class = "button-increment" data-id="${productInCartStorage.id}">+</button>
     </div>
+    </td>
     <td><button class="btn-action" data-id="${productInCartStorage.id}">X</button></td>
     </tr>
     `;
@@ -318,90 +299,132 @@ function addItemsToCart(productInCartStorage, cartItemsEl) {
 
 updateSubTotal();
 
+//to update cart
+function updateCart(){
+    let cartItemsEl = document.getElementById("cartItems");
+    console.log(cartItemsEl);
+    cartItemsEl.innerHTML = "";
+    console.log(cartItemsEl);
+    console.log(cartItems);
+
+    cartItems.forEach(function(productInCartStorage){
+        addItemsToCart(productInCartStorage, cartItemsEl);
+        
+    });
+
+
+    increasePriceAndQty();
+    decreasePriceAndQty();
+    delItemsFromCart();
+}
+
+//function to display product count 
+// const productCartCount = document.getElementById("product-count");
+// console.log(productCartCount);
+
 // function to delete product from cart
 function delItemsFromCart(){
-    const delBtn = document.querySelectorAll(".btn-action");
-    delBtn.forEach(element=>{
-        element.addEventListener("click",function(){
-            element.parentElement.parentElement.remove();
-            console.log( element.parentElement.parentElement);
+    // console.log('i ran');
+   const delBtns = document.getElementsByClassName("btn-action");
+   console.log(delBtns);
+    
+   for(let i = 0; i < delBtns.length; i++){
+    console.log('event added');
+    delBtns[i].addEventListener("click",function(){
+        console.log('clicked');
+        // element.parentElement.parentElement.remove();
 
-            //to certify that product-id exist in the cartItems array
-            let productid = element.getAttribute("data-id")
-            console.log(productid);
+        let productId = delBtns[i].getAttribute("data-id");
+        cartItems.forEach((item,index) =>{
+            if(item.id === productId){
+                cartItems.splice(index,1);
+            }
+        });
+        
+        setCartItemsLS();
+        updateCart();
+        updateSubTotal();
 
-            cartItems.forEach(function(item, index){
-                if (item.id === productid) {
-                    cartItems.splice([index, 1]);
+        
+    })
+
+   }
+    
+}
+
+//to increment product Qty and price
+
+function increasePriceAndQty() {
+    const incrementButton = document.querySelectorAll(".button-increment");
+    console.log(incrementButton);
+
+    // let singleUnit = getSingularUnit(productId);
+    // console.log(singleUnit);
+    incrementButton.forEach(element => {
+       element.addEventListener("click", function() {
+           console.log("increment-button-clicked!");
+            console.log(cartItems);
+
+            let productId = element.getAttribute("data-id");
+            console.log(productId);
+
+            let productUnit = getSingleUnit(productId);
+            console.log(productUnit);
+            cartItems.forEach(function(item) {
+                if (item.id === productId) {
+                    // console.log(item.id);
+                    // console.log(item);
+                    console.log(productUnit.pricePerUnit);
+                    item.quantity++;
+
+                    item.price+= productUnit.pricePerUnit;    
+
                 }
             })
 
-            setCartItemsLS();
-            // updateCart();
-            updateSubTotal();
-            updateProductDisplay();
-        })
-    });  
+        setCartItemsLS();
+        updateCart();
+        updateSubTotal();
+
+       })
+   })
 }
 
+//to decrement product Qty and price
 
-//to increment product Qty
-let incrementButton = document.querySelectorAll("#inc-button");
+function decreasePriceAndQty() {
+    const decrementButton = document.querySelectorAll(".button-decrement");
+    console.log(decrementButton);
 
-if(incrementButton) {
-    for(let i = 0; i < incrementButton.length; i++) {
-        incrementButton[i].addEventListener('click', function(){
-            console.log("increment-button-pressed!");
-            let cartItem = localStorage.getItem("cartItems");
-            cartItem = JSON.parse(cartItem);
-            console.log(cartItem)
-            let productId = incrementButton[i].parentElement.parsssentElement.parentElement.children[3].children[0].getAttribute("data-id");
+   decrementButton.forEach(element => {
+       element.addEventListener("click", function() {
+           console.log("decrement-button-clicked!");
+            console.log(cartItems);
+    
+            let productId = element.getAttribute("data-id");
             console.log(productId);
 
-            let productQty = incrementButton[i].parentElement.parentElement.parentElement.children[2].children[1].textContent;
-            productQty = parseInt(productQty);
+            let productUnit = getSingleUnit(productId);
+            console.log(productUnit);
+            cartItems.forEach(function(item) {
+                if (item.id === productId) {
+                    // console.log(item.id);
+                    // console.log(item);
+                    console.log(productUnit.pricePerUnit);
+                    item.quantity--;
 
-            for(let i = 0; i < cartItem.length; i++){
-                let Id = cartItem[i].id;
+                    item.price-= productUnit.pricePerUnit;    
 
-                if(productId === Id) {
-                    productQty += 1;
-                    localStorage.setItem("cartItems", JSON.stringify(cartItem[i].quantity));
                 }
-            }
-        })
-    }
+            })
+
+        setCartItemsLS();
+        updateCart();
+        updateSubTotal();
+
+       })
+   })
 }
-
-//to decrement product Qty
-let decrementButton = document.querySelectorAll("#dec-button");
-
-if(decrementButton) {
-    for(let i = 0; i < decrementButton.length; i++) {
-        decrementButton[i].addEventListener('click', function(){
-            console.log("decrement-button-pressed!");
-            let cartItem = localStorage.getItem("cartItems");
-            cartItem = JSON.parse(cartItem);
-            console.log(cartItem)
-            let productId = decrementButton[i].parentElement.parentElement.parentElement.children[3].children[0].getAttribute("data-id");
-            console.log(productId);
-
-            let productQty = decrementButton[i].parentElement.parentElement.parentElement.children[2].children[1].textContent;
-            productQty = parseInt(productQty);
-
-            for(let i = 0; i < cartItem.length; i++){
-                let Id = cartItem[i].id;
-
-                if(productId === Id) {
-                    productQty -= 1;
-                    localStorage.setItem("cartItems", JSON.stringify(cartItem[i].quantity));
-                }
-            }
-        })
-    }
-}
-
-
 
 //to update subTotal of the prices of items in the cart
 function updateSubTotal() {
